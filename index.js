@@ -55,7 +55,7 @@ function displayWeather(data) {
 function displayThreeDays(data) {
   const forecast = document.querySelector(".forecast");
   if (data) {
-    let content = "";
+    let content = `<button id="toggle-forecast">Hourly</button>`;
     data.forecast.forecastday.forEach(day => {
       content += `<div>
         ${formatDayOfWeek(day.date)}<br>
