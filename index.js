@@ -1,3 +1,13 @@
+let isShowingHourly = false;
+let input = document.getElementById("cityName");
+
+input.addEventListener("keypress", (event) => {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    document.getElementById("search-button").click();
+  }
+})
+
 document.getElementById("search-button").addEventListener("click", fetchData);
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -21,45 +31,96 @@ async function fetchData(){
     }
     const data = await response.json()
     console.log(data)
-    displayWeather(data)
-    displayThreeDays(data)
+    if (!isShowingHourly) {
+      displayThreeDays(data);
+    } else {
+      displayHourly(data);
+    }
+    document.getElementById("toggle-forecast").addEventListener("click", toggleForecast);
+    displayWeather(data);
   }
   catch(error){
     console.log(error)
   }
 }
 
+function toggleForecast() {
+  isShowingHourly = !isShowingHourly;
+  fetchData();
+}
+
+
+
 function displayWeather(data) {
   const display = document.querySelector(".display");
   const details = document.querySelector(".weather-details");
   if (data) {
-    display.innerHTML = `${data.location.name}, ${data.location.country} <br>
+    display.innerHTML = `<div class="location-time"><h3>${data.location.name}, ${data.location.country}</h3>
     ${formatDateTime(data.location.localtime)}<br>
-    Temperature: ${data.current.temp_c}°C (${data.current.temp_f}°F)<br>
-    ${data.current.condition.text}<div>
-    Feels like ${data.current.feelslike_c}°C <br>
-    <img src="${data.current.condition.icon}" alt="Weather Icon"></div>`;
+    </div>
+    <div class="feels-like">${data.current.temp_c}°C (${data.current.temp_f}°F)<br>
+    ${data.current.condition.text}<br>
+      Feels like ${Math.round(data.current.feelslike_c)}°C<br>
+      <img src="${data.current.condition.icon}" alt="Weather Icon">
+      </div>`;
 
-    details.innerHTML = `Today's weather details<br>
-    Humidity: ${data.current.humidity}<br>
-    Precipitation: ${data.current.precip_in}<br>
-    Wind Speed: ${data.current.wind_kph}<br>
-    Cloudiness: ${data.current.cloud}<br>
-    UV Index: ${data.current.uv}<br>`
+    details.innerHTML = `<div id="today"><h4>Today's weather details</div></h4><br>
+    <div id="details">
+      <div class="detail">
+        <span class="label"><i class="fa-solid fa-droplet"></i> Humidity</span>
+        <span class="value">${data.current.humidity}%</span>
+      </div>
+      <div class="detail">
+          <span class="label"><i class="fa-solid fa-cloud-rain"></i> Precipitation</span>
+          <span class="value">${data.current.precip_in}</span>
+      </div>
+      <div class="detail">
+          <span class="label"><i class="fa-solid fa-wind"></i> Wind Speed</span>
+          <span class="value">${data.current.wind_kph} km/h</span>
+      </div>
+      <div class="detail">
+          <span class="label"><i class="fa-solid fa-cloud"></i> Cloudiness</span>
+          <span class="value">${data.current.cloud}%</span>
+      </div>
+      <div class="detail">
+          <span class="label"><i class="fa-solid fa-sun"></i> UV Index</span>
+          <span class="value">${data.current.uv}</span>
+      </div>
+    </div>`
+
 
   } else {
     display.innerHTML = "Weather data not available for the specified location."
   }
 }
 
+function displayHourly(data) {
+  const forecast = document.querySelector(".forecast");
+  if (data) {
+    let content = `<button id="toggle-forecast">3-Day</button>`;
+    console.log(data)
+    data.forecast.forecastday[0].hour.forEach(hour => {
+      content += `<div>
+        ${new Date(hour.time).getHours()}:00 - ${Math.round(hour.temp_c)}°C<br>
+        ${hour.condition.text}<div><img src="${hour.condition.icon}" alt="Weather Icon"></div>
+      </div><br>`;
+    });
+    forecast.innerHTML = content;
+  } else {
+    forecast.innerHTML = "Hourly weather data not available.";
+  }
+}
+
+
+
 function displayThreeDays(data) {
   const forecast = document.querySelector(".forecast");
   if (data) {
     let content = `<button id="toggle-forecast">Hourly</button>`;
     data.forecast.forecastday.forEach(day => {
-      content += `<div>
+      content += `<div id="forecast-info">
         ${formatDayOfWeek(day.date)}<br>
-        ${day.day.mintemp_c}°C/${day.day.maxtemp_c}°C<br>
+        ${Math.round(day.day.mintemp_c)}°C/${Math.round(day.day.maxtemp_c)}°C<br>
         ${day.day.condition.text}<div><img src="${day.day.condition.icon}" alt="Weather Icon"></div>
       </div><br>`;
     });
