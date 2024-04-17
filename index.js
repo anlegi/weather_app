@@ -107,7 +107,7 @@ function displayHourly(data) {
         <div>
           <span>${new Date(hour.time).getHours()}:00</span>
           <img src="${hour.condition.icon}" alt="Weather Icon">
-          <span>${Math.round(hour.temp_c)}°C</span>
+          <span><strong>${Math.round(hour.temp_c)}°C</strong></span>
         </div>
       </div>`;
     });
@@ -129,7 +129,7 @@ function displayThreeDays(data) {
         <div>
           <span>${formatDayOfWeek(day.date)}</span>
           <img src="${day.day.condition.icon}" alt="Weather Icon">
-          <span>${Math.round(day.day.mintemp_c)}°C/${Math.round(day.day.maxtemp_c)}°C</span>
+          <span><strong>${Math.round(day.day.mintemp_c)}°C/${Math.round(day.day.maxtemp_c)}°C</strong></span>
         </div>
       </div>`;
     });
