@@ -55,16 +55,18 @@ function displayWeather(data) {
   const display = document.querySelector(".display");
   const details = document.querySelector(".weather-details");
   if (data) {
-    display.innerHTML = `<div class="location-time"><h3>${data.location.name}, ${data.location.country}</h3>
-    ${formatDateTime(data.location.localtime)}<br>
+    display.innerHTML = `
+    <div class="location-time"><h3>${data.location.name}, ${data.location.country}</h3>
+      <span>${formatDateTime(data.location.localtime)}</span>
     </div>
-    <div class="feels-like">${data.current.temp_c}°C (${data.current.temp_f}°F)<br>
-    ${data.current.condition.text}<br>
-      Feels like ${Math.round(data.current.feelslike_c)}°C<br>
-      <img src="${data.current.condition.icon}" alt="Weather Icon">
-      </div>`;
+    <div class="feels-like">
+      <strong>${data.current.temp_c}°C</strong><br>
+      <span>${data.current.condition.text}</span><br>
+      <span>Feels like ${Math.round(data.current.feelslike_c)}°C</span>
+    </div>
+    <img src="${data.current.condition.icon}" alt="Weather Icon">`;
 
-    details.innerHTML = `<div id="today"><h4>Today's weather details</div></h4><br>
+    details.innerHTML = `<div id="today"><h3>Today's weather details</div></h4><br>
     <div id="details">
       <div class="detail">
         <span class="label"><i class="fa-solid fa-droplet"></i> Humidity</span>
@@ -100,10 +102,14 @@ function displayHourly(data) {
     let content = `<button id="toggle-forecast">3-Day</button>`;
     console.log(data)
     data.forecast.forecastday[0].hour.forEach(hour => {
-      content += `<div>
-        ${new Date(hour.time).getHours()}:00 - ${Math.round(hour.temp_c)}°C<br>
-        ${hour.condition.text}<div><img src="${hour.condition.icon}" alt="Weather Icon"></div>
-      </div><br>`;
+      content += `
+      <div class="hour">
+        <div>
+          <span>${new Date(hour.time).getHours()}:00</span>
+          <img src="${hour.condition.icon}" alt="Weather Icon">
+          <span>${Math.round(hour.temp_c)}°C</span>
+        </div>
+      </div>`;
     });
     forecast.innerHTML = content;
   } else {
@@ -118,11 +124,14 @@ function displayThreeDays(data) {
   if (data) {
     let content = `<button id="toggle-forecast">Hourly</button>`;
     data.forecast.forecastday.forEach(day => {
-      content += `<div id="forecast-info">
-        ${formatDayOfWeek(day.date)}<br>
-        ${Math.round(day.day.mintemp_c)}°C/${Math.round(day.day.maxtemp_c)}°C<br>
-        ${day.day.condition.text}<div><img src="${day.day.condition.icon}" alt="Weather Icon"></div>
-      </div><br>`;
+      content += `
+      <div id="forecast-info">
+        <div>
+          <span>${formatDayOfWeek(day.date)}</span>
+          <img src="${day.day.condition.icon}" alt="Weather Icon">
+          <span>${Math.round(day.day.mintemp_c)}°C/${Math.round(day.day.maxtemp_c)}°C</span>
+        </div>
+      </div>`;
     });
     forecast.innerHTML = content;
   } else {
