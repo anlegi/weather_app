@@ -167,3 +167,11 @@ body {
 #forecast-info {
   margin-top: 20px;
 }
+
+#temp {
+  font-size: 30px;
+}
+
+.feels-like span {
+  font-size: 15px;
+}

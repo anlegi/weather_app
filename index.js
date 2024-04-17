@@ -60,7 +60,7 @@ function displayWeather(data) {
       <span>${formatDateTime(data.location.localtime)}</span>
     </div>
     <div class="feels-like">
-      <strong>${data.current.temp_c}°C</strong><br>
+      <span id="temp"><strong>${data.current.temp_c}°C</strong></span><br>
       <span>${data.current.condition.text}</span><br>
       <span>Feels like ${Math.round(data.current.feelslike_c)}°C</span>
     </div>
@@ -69,23 +69,23 @@ function displayWeather(data) {
     details.innerHTML = `<div id="today"><h3>Today's weather details</div></h4><br>
     <div id="details">
       <div class="detail">
-        <span class="label"><i class="fa-solid fa-droplet"></i> Humidity</span>
+        <span class="label"><i class="fa-solid fa-droplet"></i><strong> Humidity</strong></span>
         <span class="value">${data.current.humidity}%</span>
       </div>
       <div class="detail">
-          <span class="label"><i class="fa-solid fa-cloud-rain"></i> Precipitation</span>
+          <span class="label"><i class="fa-solid fa-cloud-rain"></i> <strong>Precipitation</strong></span>
           <span class="value">${data.current.precip_in}</span>
       </div>
       <div class="detail">
-          <span class="label"><i class="fa-solid fa-wind"></i> Wind Speed</span>
+          <span class="label"><i class="fa-solid fa-wind"></i><strong> Wind Speed</strong></span>
           <span class="value">${data.current.wind_kph} km/h</span>
       </div>
       <div class="detail">
-          <span class="label"><i class="fa-solid fa-cloud"></i> Cloudiness</span>
+          <span class="label"><i class="fa-solid fa-cloud"></i><strong> Cloudiness</strong></span>
           <span class="value">${data.current.cloud}%</span>
       </div>
       <div class="detail">
-          <span class="label"><i class="fa-solid fa-sun"></i> UV Index</span>
+          <span class="label"><i class="fa-solid fa-sun"></i><strong> UV Index</strong></span>
           <span class="value">${data.current.uv}</span>
       </div>
     </div>`
